@@ -1,15 +1,21 @@
-#include "idt.h"
+#include "include/idt.h"
+#include "include/vga.h"
+#include "include/shell.h"
+#include "include/string.h"
+#include "include/keyboard.h"
+#include "include/pic.h"
 
 void kernel_main(void) {
+	pic_remap();
     idt_init();
-
-    volatile char *vga = (volatile char*)0xB8000;
-    vga[0] = 'I';
-    vga[1] = 0x0F;
-    vga[2] = 'D';
-    vga[3] = 0x0F;
-    vga[4] = 'T';
-    vga[5] = 0x0F;
+	
+	vga_clear();
+	vga_print("Welcome To GodOS\n");
+	vga_print("Help for commands\n");
+	
+	shell_init();
+	
+	keyboard_init();
 
     for (;;);
 }
